@@ -1,0 +1,272 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 23
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database world;
+ERROR 1007 (HY000): Can't create database 'world'; database exists
+mysql> create database world;
+ERROR 1007 (HY000): Can't create database 'world'; database exists
+mysql> create database MyTable;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> use MyTable;
+Database changed
+mysql> create table students(
+    -> s_id int primary key not null,
+    -> s_name varchar(30) not null,
+    -> course_name varchar(30) not null);
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> desc students;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| s_id        | int         | NO   | PRI | NULL    |       |
+| s_name      | varchar(30) | NO   |     | NULL    |       |
+| course_name | varchar(30) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.06 sec)
+
+mysql> create table officers(
+    -> of_id primary key not null,
+    -> of_name varchar(30) not null,
+    -> address varchar(30) not null,
+    -> ^C
+mysql> create table officers(
+    -> of_id primary key not null,
+    -> of_name varchar(30) not null,
+    -> address varchar(30) not null);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key not null,
+of_name varchar(30) not null,
+address varchar(30) not null' at line 2
+mysql> create table officers(
+    -> of_id int primary key not null,
+    -> of_name varchar(30) not null,
+    -> address varchar(30) not null);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc officers;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| of_id   | int         | NO   | PRI | NULL    |       |
+| of_name | varchar(30) | NO   |     | NULL    |       |
+| address | varchar(30) | NO   |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> selcet * from students;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selcet * from students' at line 1
+mysql> select * from students;
+Empty set (0.01 sec)
+
+mysql> insert into students values(1,"Somnath","React");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into students values(2,"Suvam","Node");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into students values(3,"Ayan","Java");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into students values(4,"Snehasish","Mongodb");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from students;
++------+-----------+-------------+
+| s_id | s_name    | course_name |
++------+-----------+-------------+
+|    1 | Somnath   | React       |
+|    2 | Suvam     | Node        |
+|    3 | Ayan      | Java        |
+|    4 | Snehasish | Mongodb     |
++------+-----------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into officers values(1,"Ram","Lucknow");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into officers values(2,"Shyam","Mumbai");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into officers values(3,"Modhu","Berhampore");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into officers values(4,"Jadu","Kolkata");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from officers;
++-------+---------+------------+
+| of_id | of_name | address    |
++-------+---------+------------+
+|     1 | Ram     | Lucknow    |
+|     2 | Shyam   | Mumbai     |
+|     3 | Modhu   | Berhampore |
+|     4 | Jadu    | Kolkata    |
++-------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select officers.of_name,officers.address,students.s_name,students.course_name
+    -> from officers
+    -> INNER JOIN students
+    -> ON officers.of_id = students.s_id;
++---------+------------+-----------+-------------+
+| of_name | address    | s_name    | course_name |
++---------+------------+-----------+-------------+
+| Ram     | Lucknow    | Somnath   | React       |
+| Shyam   | Mumbai     | Suvam     | Node        |
+| Modhu   | Berhampore | Ayan      | Java        |
+| Jadu    | Kolkata    | Snehasish | Mongodb     |
++---------+------------+-----------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> select officers.of_name,students.s_name
+    -> from officers
+    -> LEFT JOIN students
+    -> ON officers.of_id = students.s_id;
++---------+-----------+
+| of_name | s_name    |
++---------+-----------+
+| Ram     | Somnath   |
+| Shyam   | Suvam     |
+| Modhu   | Ayan      |
+| Jadu    | Snehasish |
++---------+-----------+
+4 rows in set (0.01 sec)
+
+mysql> select officers.address,students.course_name
+    -> from officers
+    -> RIGHT JOIN students
+    -> ON officers.of_id = students.s_id;
++------------+-------------+
+| address    | course_name |
++------------+-------------+
+| Lucknow    | React       |
+| Mumbai     | Node        |
+| Berhampore | Java        |
+| Kolkata    | Mongodb     |
++------------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into students values(5,"Somu","C++");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into students values(6,"Sam","C#");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from students;
++------+-----------+-------------+
+| s_id | s_name    | course_name |
++------+-----------+-------------+
+|    1 | Somnath   | React       |
+|    2 | Suvam     | Node        |
+|    3 | Ayan      | Java        |
+|    4 | Snehasish | Mongodb     |
+|    5 | Somu      | C++         |
+|    6 | Sam       | C#          |
++------+-----------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> select officers.address,students.course_name
+    -> from officers
+    -> RIGHT JOIN students
+    -> ON officers.of_id = students.s_id;
++------------+-------------+
+| address    | course_name |
++------------+-------------+
+| Lucknow    | React       |
+| Mumbai     | Node        |
+| Berhampore | Java        |
+| Kolkata    | Mongodb     |
+| NULL       | C++         |
+| NULL       | C#          |
++------------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> select officers.of_name,officers.address,students.s_name,students.course_name
+    -> from officers
+    -> FULL JOIN students
+    -> ON officers.of_id = students.s_id;
+ERROR 1054 (42S22): Unknown column 'officers.of_name' in 'field list'
+mysql> select officers.of_name,officers.address,students.s_name,students.course_name
+    -> from officers
+    -> FULL JOIN students
+    -> ON officers.of_id = students.s_id;
+ERROR 1054 (42S22): Unknown column 'officers.of_name' in 'field list'
+mysql> select officers.of_name,officers.address,students.s_name,students.course_name
+    -> from officers
+    -> FULL JOIN students
+    -> ON officers.of_id = students.s_id;
+ERROR 1054 (42S22): Unknown column 'officers.of_name' in 'field list'
+mysql> select * from officers full join students;
++-------+---------+------------+------+-----------+-------------+
+| of_id | of_name | address    | s_id | s_name    | course_name |
++-------+---------+------------+------+-----------+-------------+
+|     4 | Jadu    | Kolkata    |    1 | Somnath   | React       |
+|     3 | Modhu   | Berhampore |    1 | Somnath   | React       |
+|     2 | Shyam   | Mumbai     |    1 | Somnath   | React       |
+|     1 | Ram     | Lucknow    |    1 | Somnath   | React       |
+|     4 | Jadu    | Kolkata    |    2 | Suvam     | Node        |
+|     3 | Modhu   | Berhampore |    2 | Suvam     | Node        |
+|     2 | Shyam   | Mumbai     |    2 | Suvam     | Node        |
+|     1 | Ram     | Lucknow    |    2 | Suvam     | Node        |
+|     4 | Jadu    | Kolkata    |    3 | Ayan      | Java        |
+|     3 | Modhu   | Berhampore |    3 | Ayan      | Java        |
+|     2 | Shyam   | Mumbai     |    3 | Ayan      | Java        |
+|     1 | Ram     | Lucknow    |    3 | Ayan      | Java        |
+|     4 | Jadu    | Kolkata    |    4 | Snehasish | Mongodb     |
+|     3 | Modhu   | Berhampore |    4 | Snehasish | Mongodb     |
+|     2 | Shyam   | Mumbai     |    4 | Snehasish | Mongodb     |
+|     1 | Ram     | Lucknow    |    4 | Snehasish | Mongodb     |
+|     4 | Jadu    | Kolkata    |    5 | Somu      | C++         |
+|     3 | Modhu   | Berhampore |    5 | Somu      | C++         |
+|     2 | Shyam   | Mumbai     |    5 | Somu      | C++         |
+|     1 | Ram     | Lucknow    |    5 | Somu      | C++         |
+|     4 | Jadu    | Kolkata    |    6 | Sam       | C#          |
+|     3 | Modhu   | Berhampore |    6 | Sam       | C#          |
+|     2 | Shyam   | Mumbai     |    6 | Sam       | C#          |
+|     1 | Ram     | Lucknow    |    6 | Sam       | C#          |
++-------+---------+------------+------+-----------+-------------+
+24 rows in set (0.02 sec)
+
+mysql> select * from officers cross join students;
++-------+---------+------------+------+-----------+-------------+
+| of_id | of_name | address    | s_id | s_name    | course_name |
++-------+---------+------------+------+-----------+-------------+
+|     4 | Jadu    | Kolkata    |    1 | Somnath   | React       |
+|     3 | Modhu   | Berhampore |    1 | Somnath   | React       |
+|     2 | Shyam   | Mumbai     |    1 | Somnath   | React       |
+|     1 | Ram     | Lucknow    |    1 | Somnath   | React       |
+|     4 | Jadu    | Kolkata    |    2 | Suvam     | Node        |
+|     3 | Modhu   | Berhampore |    2 | Suvam     | Node        |
+|     2 | Shyam   | Mumbai     |    2 | Suvam     | Node        |
+|     1 | Ram     | Lucknow    |    2 | Suvam     | Node        |
+|     4 | Jadu    | Kolkata    |    3 | Ayan      | Java        |
+|     3 | Modhu   | Berhampore |    3 | Ayan      | Java        |
+|     2 | Shyam   | Mumbai     |    3 | Ayan      | Java        |
+|     1 | Ram     | Lucknow    |    3 | Ayan      | Java        |
+|     4 | Jadu    | Kolkata    |    4 | Snehasish | Mongodb     |
+|     3 | Modhu   | Berhampore |    4 | Snehasish | Mongodb     |
+|     2 | Shyam   | Mumbai     |    4 | Snehasish | Mongodb     |
+|     1 | Ram     | Lucknow    |    4 | Snehasish | Mongodb     |
+|     4 | Jadu    | Kolkata    |    5 | Somu      | C++         |
+|     3 | Modhu   | Berhampore |    5 | Somu      | C++         |
+|     2 | Shyam   | Mumbai     |    5 | Somu      | C++         |
+|     1 | Ram     | Lucknow    |    5 | Somu      | C++         |
+|     4 | Jadu    | Kolkata    |    6 | Sam       | C#          |
+|     3 | Modhu   | Berhampore |    6 | Sam       | C#          |
+|     2 | Shyam   | Mumbai     |    6 | Sam       | C#          |
+|     1 | Ram     | Lucknow    |    6 | Sam       | C#          |
++-------+---------+------------+------+-----------+-------------+
+24 rows in set (0.00 sec)
+
+mysql>
